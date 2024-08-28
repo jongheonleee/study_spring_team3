@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div th:fragment="header">
+  <nav class="navbar">
+    <div class="logo">29CM</div>
+    <div class="menu">
+<!--      <ul>-->
+<!--        <li><a href="#">BEST</a></li>-->
+<!--        <li><a href="#">WOMEN</a></li>-->
+<!--        <li><a href="#">MEN</a></li>-->
+<!--        <li><a href="#">KITCHEN</a></li>-->
+<!--        <li><a href="#">ELECTRONICS</a></li>-->
+<!--        <li><a href="#">DIGITAL</a></li>-->
+<!--      </ul>-->
+      <a href="#">BEST</a>
+      <a href="#">WOMEN</a>
+      <a href="#">MEN</a>
+      <a href="#">INTERIOR</a>
+      <a href="#">KITCHEN</a>
+      <a href="#">ELECTRONICS</a>
+      <a href="#">DIGITAL</a>
+      <a href="#">BEAUTY</a>
+      <a href="#">FOOD</a>
+      <a href="#">LEISURE</a>
+      <a href="#">KIDS</a>
+      <a href="#">CULTURE</a>
+      <a href="#">Event</a>
+      <a href="#">Lookbook</a>
+    </div>
+    <div class="user-menu">
+<!--      <ul>-->
+<!--        <li><a href="/myPage">MY PAGE</a></li>-->
+<!--        <li><a href="/wish">MY LIKE</a></li>-->
+<!--        <li><a href="/cart">SHOPPING BAG</a></li>-->
+<!--        <li sec:authentication="isAnonymous()">-->
+<!--          <a href="/members/login">LOGIN</a>-->
+<!--        </li>-->
+<!--        <li sec:authentication="isAuthenticated()">-->
+<!--          <a href="/members/logout">LOGOUT</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+      <a href="/myPage">MY PAGE</a>
+      <a href="/wish">MY LIKE</a>
+      <a href="/cart">SHOPPING BAG</a>
+      <a href="/members/login">LOGIN</a>
+    </div>
+  </nav>
+</div>
+</html>
