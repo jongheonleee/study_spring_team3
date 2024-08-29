@@ -1,6 +1,7 @@
 package com.example.shop2.entity;
 
 import com.example.shop2.constant.Role;
+import com.example.shop2.dto.MemberFormDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,12 +18,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Entity
 @Table(name = "member")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter @Setter
 @ToString
 public class Member {
@@ -53,17 +56,16 @@ public class Member {
 //        this.setAddress(memberFormDto.getAddress());
 //        this.setRole(Role.USER);
 //    }
-//
-//    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder, Role role) {
-//        var member = new Member();
-//
-//        member.setName(memberFormDto.getName());
-//        member.setEmail(memberFormDto.getEmail());
-//        member.setAddress(memberFormDto.getAddress());
-//        String password = passwordEncoder.encode(memberFormDto.getPassword());
-//        member.setPassword(password);
-//        member.setRole(role);
-//
-//        return member;
-//    }
+
+    public static Member createMember(MemberFormDto memberFormDto) {
+        var member = new Member();
+
+        member.setName(memberFormDto.getName());
+        member.setEmail(memberFormDto.getEmail());
+        member.setAddress(memberFormDto.getAddress());
+        member.setPassword(memberFormDto.getPassword());
+        member.setRole(Role.USER);
+
+        return member;
+    }
 }

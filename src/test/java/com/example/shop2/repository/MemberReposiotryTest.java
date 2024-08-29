@@ -11,7 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.TransactionSystemException;
@@ -21,7 +20,7 @@ import org.springframework.transaction.TransactionSystemException;
 class MemberReposiotryTest {
 
     @Autowired
-    private MemberReposiotryJpa memberReposiotry; // 추후에 인터페이스로 변환
+    private MemberRepository memberReposiotry; // 추후에 인터페이스로 변환
 
     @BeforeEach
     public void setUp() {
@@ -36,13 +35,13 @@ class MemberReposiotryTest {
      * - 3. 로그아웃
      *
      * Repository 기능 구현 내용
-     * - 1. 회원 등록 -> create ✅
+     * - 1. 회원 등록 -> save ✅
      * - 1-1. 필수값 누락
      * - 1-2. 중복된 email로 회원 등록
      * - 1-3. 중복된 id로 회원 등록 x(회원 id는 현재 시퀀스(자동증분)임)
      * - 1-4. 회원 등록 성공
      *
-     * - 2. 회원 조회 -> id, email 찾기
+     * - 2. 회원 조회 -> id, email 찾기 ✅
      * - 2-1. 없는 id로 회원 조회, 실패 -> ORM은 EntityNotFounException 던짐, 이 부분 추상화
      * - 2-2. id로 회원 조회
      * - 2-3. 없는 email로 회원 조회, 실패 -> ORM은 EntityNotFounException 던짐, 이 부분 추상화
