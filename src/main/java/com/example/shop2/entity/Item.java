@@ -1,5 +1,6 @@
 package com.example.shop2.entity;
 
+
 import com.example.shop2.constant.ItemSellState;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
