@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.TransactionSystemException;
@@ -37,6 +38,19 @@ class MemberServiceBaseTest {
 
     @InjectMocks
     private MemberServiceBase memberServiceBase;
+
+    private static class CustomDataAccessException extends DataAccessException {
+
+        // 기본 생성자
+        public CustomDataAccessException(String msg) {
+            super(msg);
+        }
+
+        // 원인을 포함하는 생성자
+        public CustomDataAccessException(String msg, Throwable cause) {
+            super(msg, cause);
+        }
+    }
 
     @BeforeEach
     public void setUp() {
@@ -85,7 +99,8 @@ class MemberServiceBaseTest {
         var emptyRequiredValuesMemberFormDto = createMemberFormDto(1);
         emptyRequiredValuesMemberFormDto.setEmail(null);
 
-        when(memberRepository.save(any(Member.class))).thenThrow(TransactionSystemException.class);
+        when(memberRepository.save(any(Member.class)))
+                .thenThrow(TransactionSystemException.class);
 
         assertThrows(EmptyRequiredValuesException.class,
                 () -> memberServiceBase.create(emptyRequiredValuesMemberFormDto));
@@ -98,10 +113,11 @@ class MemberServiceBaseTest {
         LocalDateTime expectedEndTime = startTime.plusSeconds(9);
 
         MemberFormDto memberFormDto = createMemberFormDto(1);
-        when(memberRepository.save(any(Member.class))).thenThrow(RuntimeException.class);
+        when(memberRepository.save(any(Member.class)))
+                .thenThrow(CustomDataAccessException.class);
 
-
-        assertThrows(RetryFailedException.class, () -> memberServiceBase.create(memberFormDto)); // 10초 걸리게 만듦
+        assertThrows(RetryFailedException.class, 
+                () -> memberServiceBase.create(memberFormDto)); // 10초 걸리게 만듦
 
         LocalDateTime actualEndTime = LocalDateTime.now();
         assertTrue(actualEndTime.isAfter(expectedEndTime));

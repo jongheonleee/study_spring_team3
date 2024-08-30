@@ -1,5 +1,6 @@
 package com.example.shop2.service;
 
+import static com.example.shop2.error.GlobalErrorCode.*;
 import static com.example.shop2.error.MemberErrorCode.*;
 import com.example.shop2.dto.MemberFormDto;
 import com.example.shop2.entity.Member;
@@ -11,6 +12,7 @@ import com.example.shop2.exception.member.MemberNotFoundException;
 import com.example.shop2.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
@@ -44,9 +46,9 @@ public class MemberServiceBase implements MemberService {
          */
         var member = Member.createMember(memberFormDto);
         checkDuplicatedEmail(memberFormDto);
-        Member savedMember = retryWhenSomethingWrong(INIT_RETRIES, member); // 이 부분 AOP, 데코레이터 패턴 적용시키기
+        return retryWhenSomethingWrong(INIT_RETRIES, member); // 이 부분 AOP, 데코레이터 패턴 적용시키기
 //        Member savedMember = memberRepository.save(member);
-        return savedMember;
+//        return savedMember;
     }
 
     /**
@@ -94,14 +96,17 @@ public class MemberServiceBase implements MemberService {
     }
 
     private Member retryWhenSomethingWrong(int retries, Member member) {
+//        var member = Member.createMember(memberFormDto);
+//        checkDuplicatedEmail(memberFormDto);
+
         while (retries++ < MAX_RETRIES) {
             try {
-                Member savedMember = memberRepository.save(member);
-                if (savedMember == null) {
-                    throw new RuntimeException();
-                }
+//                Member savedMember = memberRepository.save(member);
+////                if (savedMember == null) {
+////                    throw new RuntimeException();
+////                }
 
-                return savedMember;
+                return memberRepository.save(member);
             } catch (TransactionSystemException e) {
                 log.debug("회원쪽에서 전달한 데이터에 필수 입력값이 누락되었습니다. 회원쪽에게 재요청하겠습니다.");
                 log.debug(e.getMessage());
@@ -114,10 +119,13 @@ public class MemberServiceBase implements MemberService {
                 e.printStackTrace();
                 throw new DuplicatedEmailException(e, DuplicatedEmail);
 
-            } catch (RuntimeException e) {
+            } catch (DataAccessException e) {
+                System.out.println("dededededede");
                 log.debug("회원 등록 중 예외 발생, %d 동안 대기했다가 재시도하겠습니다. [재시도 횟수 : %d]", RETRY_DELAY, retries);
                 log.debug(e.getMessage());
                 e.printStackTrace();
+                System.out.println(e instanceof DataAccessException);
+//                System.out.println(e.getMessage());
                 try {
                     Thread.sleep(RETRY_DELAY);
                 } catch (InterruptedException ex) {}
@@ -125,7 +133,7 @@ public class MemberServiceBase implements MemberService {
         }
 
         log.debug("재시도를 했지만, 실패했습니다.");
-        throw new RetryFailedException(null, GlobalErrorCode.RetryFailed);
+        throw new RetryFailedException(null, RetryFailed);
     }
 
 
