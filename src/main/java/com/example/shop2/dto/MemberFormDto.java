@@ -27,4 +27,5 @@ public class MemberFormDto {
     private LocalDateTime regTime;
     private String modifiedAt;
     private LocalDateTime updateTime;
+    private boolean rememberMe;
 }

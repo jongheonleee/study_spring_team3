@@ -20,6 +20,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.TransactionSystemException;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 class MemberServiceTest {
 
@@ -137,7 +139,7 @@ class MemberServiceTest {
 
         // 실행, 결과가 False
         memberFormDto.setPassword("wrongpassword");
-        assertFalse(memberService.checkLogin(memberFormDto));
+        assertFalse(memberService.isValidUser(memberFormDto));
 
     }
 
@@ -152,7 +154,7 @@ class MemberServiceTest {
         when(memberRepository.findByEmail(anyString())).thenReturn(member);
 
         // 실행, 결과가 False
-        assertTrue(memberService.checkLogin(memberFormDto));
+        assertTrue(memberService.isValidUser(memberFormDto));
     }
 
     @DisplayName("로그인 - 2-3. 해당 이메일로 회원을 조회하지 못한 경우, 회원을 찾을 수 없다는 예외 던지기")
@@ -166,7 +168,7 @@ class MemberServiceTest {
         when(memberRepository.findByEmail(anyString())).thenReturn(null);
 
         // 실행, 결과가 False
-        assertThrows(MemberNotFoundException.class, () -> memberService.checkLogin(memberFormDto));
+        assertFalse(memberService.isValidUser(memberFormDto));
     }
 
 
