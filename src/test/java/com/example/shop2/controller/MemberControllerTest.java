@@ -15,17 +15,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.example.shop2.constant.Role;
 import com.example.shop2.dto.MemberFormDto;
 import com.example.shop2.entity.Member;
-import com.example.shop2.error.MemberErrorCode;
 import com.example.shop2.exception.global.EmptyRequiredValuesException;
 import com.example.shop2.exception.member.DuplicatedEmailException;
-import com.example.shop2.service.MemberService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
+import com.example.shop2.service.MemberServiceBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -35,7 +30,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
@@ -44,7 +38,7 @@ class MemberControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private MemberService memberService;
+    private MemberServiceBase memberServiceBase;
 
     @MockBean
     private BindingResult bindingResult; // BindingResult를 모킹
@@ -85,7 +79,7 @@ class MemberControllerTest {
     @DisplayName("1-1. 회원 등록 성공 -> 메인 페이지 이동")
     @Test
     public void testMemberRegisterSuccess() throws Exception{
-        when(memberService
+        when(memberServiceBase
                 .create(any(MemberFormDto.class)))
                 .thenReturn(new Member());
 
@@ -106,7 +100,7 @@ class MemberControllerTest {
     @DisplayName("1-2. 회원 등록 실패 : 회원 필드 누락 -> 회원 등록 페이지로 이동 및 실패요인 메시지 전달")
     @Test
     public void testMemberFieldInvalidatedFailed() throws Exception {
-        when(memberService
+        when(memberServiceBase
                 .create(any(MemberFormDto.class)))
                 .thenThrow(new EmptyRequiredValuesException(null, EmptyRequiredValue));
 
@@ -125,7 +119,7 @@ class MemberControllerTest {
     @DisplayName("1-3. 회원 등록 실패 : 중복된 이메일 -> 회원 등록 페이지로 이동 및 실패요인 메시지 전달")
     @Test
     public void testMemberDuplicatedEmailFailed() throws Exception {
-        when(memberService
+        when(memberServiceBase
                 .create(any(MemberFormDto.class)))
                 .thenThrow(new DuplicatedEmailException(null, DuplicatedEmail));
 
@@ -144,7 +138,7 @@ class MemberControllerTest {
     @DisplayName("2-1. 로그인 성공 -> 메인 페이지 이동")
     @Test
     public void testMemberLoginSuccess() throws Exception{
-        when(memberService
+        when(memberServiceBase
                 .isValidUser(any(MemberFormDto.class)))
                 .thenReturn(true);
 
@@ -156,7 +150,7 @@ class MemberControllerTest {
     @DisplayName("2-2. 로그인 실패 -> 로그인 페이지로 이동 및 실패요인 메시지 전달")
     @Test
     public void testMemberLoginFailed() throws Exception{
-        when(memberService
+        when(memberServiceBase
                 .isValidUser(any(MemberFormDto.class)))
                 .thenReturn(false);
 

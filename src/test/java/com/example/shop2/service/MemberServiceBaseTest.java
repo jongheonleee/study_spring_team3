@@ -8,7 +8,6 @@ import com.example.shop2.entity.Member;
 import com.example.shop2.exception.global.EmptyRequiredValuesException;
 import com.example.shop2.exception.global.RetryFailedException;
 import com.example.shop2.exception.member.DuplicatedEmailException;
-import com.example.shop2.exception.member.MemberNotFoundException;
 import com.example.shop2.repository.MemberRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,18 +30,18 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
-class MemberServiceTest {
+class MemberServiceBaseTest {
 
     @Mock
     private MemberRepository memberRepository;
 
     @InjectMocks
-    private MemberService memberService;
+    private MemberServiceBase memberServiceBase;
 
     @BeforeEach
     public void setUp() {
         assertNotNull(memberRepository);
-        assertNotNull(memberService);
+        assertNotNull(memberServiceBase);
     }
 
     /**
@@ -77,7 +76,7 @@ class MemberServiceTest {
         when(memberRepository.save(any(Member.class))).thenThrow(DataIntegrityViolationException.class);
 
         assertThrows(DuplicatedEmailException.class,
-                () -> memberService.create(duplicatedEmailMemberFormDto));
+                () -> memberServiceBase.create(duplicatedEmailMemberFormDto));
     }
 
     @DisplayName("회원 등록 - 1-2. 필수값이 누락된 DTO로 회원 등록할 경우, 필수값 누락됐다는 예외 던지기")
@@ -89,7 +88,7 @@ class MemberServiceTest {
         when(memberRepository.save(any(Member.class))).thenThrow(TransactionSystemException.class);
 
         assertThrows(EmptyRequiredValuesException.class,
-                () -> memberService.create(emptyRequiredValuesMemberFormDto));
+                () -> memberServiceBase.create(emptyRequiredValuesMemberFormDto));
     }
 
     @DisplayName("회원 등록 - 1-3. DB상의 문제가 발생해서 재시도 처리")
@@ -102,7 +101,7 @@ class MemberServiceTest {
         when(memberRepository.save(any(Member.class))).thenThrow(RuntimeException.class);
 
 
-        assertThrows(RetryFailedException.class, () -> memberService.create(memberFormDto)); // 10초 걸리게 만듦
+        assertThrows(RetryFailedException.class, () -> memberServiceBase.create(memberFormDto)); // 10초 걸리게 만듦
 
         LocalDateTime actualEndTime = LocalDateTime.now();
         assertTrue(actualEndTime.isAfter(expectedEndTime));
@@ -119,7 +118,7 @@ class MemberServiceTest {
             when(memberRepository.save(any(Member.class))).thenReturn(member);
             System.out.println(memberRepository.save(member));
 
-            Member savedMember = memberService.create(memberFormDto);
+            Member savedMember = memberServiceBase.create(memberFormDto);
 
             assertSameMember(member, savedMember);
         }
@@ -139,7 +138,7 @@ class MemberServiceTest {
 
         // 실행, 결과가 False
         memberFormDto.setPassword("wrongpassword");
-        assertFalse(memberService.isValidUser(memberFormDto));
+        assertFalse(memberServiceBase.isValidUser(memberFormDto));
 
     }
 
@@ -154,7 +153,7 @@ class MemberServiceTest {
         when(memberRepository.findByEmail(anyString())).thenReturn(member);
 
         // 실행, 결과가 False
-        assertTrue(memberService.isValidUser(memberFormDto));
+        assertTrue(memberServiceBase.isValidUser(memberFormDto));
     }
 
     @DisplayName("로그인 - 2-3. 해당 이메일로 회원을 조회하지 못한 경우, 회원을 찾을 수 없다는 예외 던지기")
@@ -168,7 +167,7 @@ class MemberServiceTest {
         when(memberRepository.findByEmail(anyString())).thenReturn(null);
 
         // 실행, 결과가 False
-        assertFalse(memberService.isValidUser(memberFormDto));
+        assertFalse(memberServiceBase.isValidUser(memberFormDto));
     }
 
 

@@ -2,11 +2,10 @@ package com.example.shop2.controller;
 
 
 import com.example.shop2.dto.MemberFormDto;
-import com.example.shop2.entity.Member;
 import com.example.shop2.exception.global.EmptyRequiredValuesException;
 import com.example.shop2.exception.global.RetryFailedException;
 import com.example.shop2.exception.member.DuplicatedEmailException;
-import com.example.shop2.service.MemberService;
+import com.example.shop2.service.MemberServiceBase;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MemberController {
 
     @Autowired
-    private MemberService memberService;
+    private MemberServiceBase memberServiceBase;
 
     @GetMapping("/new")
     public String newMember(String errorMsg, Model model, MemberFormDto memberFormDto) {
@@ -47,7 +46,7 @@ public class MemberController {
         }
 
         try {
-            memberService.create(memberFormDto);
+            memberServiceBase.create(memberFormDto);
         } catch (DuplicatedEmailException | EmptyRequiredValuesException e) {
             rtts.addAttribute("errorMsg", e.getMessage());
             log.debug(e.getMessage());
@@ -110,7 +109,7 @@ public class MemberController {
     }
 
     private boolean isValidMember(MemberFormDto memberFormDto, HttpServletRequest request, HttpServletResponse response) {
-        if (memberService.isValidUser(memberFormDto)) {
+        if (memberServiceBase.isValidUser(memberFormDto)) {
             HttpSession session = request.getSession();
             session.setAttribute("email", memberFormDto.getEmail());
 
