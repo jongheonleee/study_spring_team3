@@ -20,6 +20,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
@@ -60,15 +61,16 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String loginForm(String errorMsg, Model model) {
+    public String loginForm(HttpServletRequest request, String errorMsg, Model model) {
+        model.addAttribute("email", getEmailFromCookie(request));
         model.addAttribute("errorMsg", errorMsg);
         return "/member/loginForm";
     }
 
     @PostMapping("/login")
-    public String login(MemberFormDto memberFormDto, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rtts, Model model) {
+    public String login(MemberFormDto memberFormDto, @RequestParam(required = false) String rememberMe, HttpServletRequest request, HttpServletResponse response, RedirectAttributes rtts, Model model) {
         if (isAlreadyLogin(request, memberFormDto)
-                || isValidMember(memberFormDto, request, response)) {
+                || isValidMember(memberFormDto, request, response, rememberMe)) {
             return "redirect:/";
         }
 
@@ -83,7 +85,18 @@ public class MemberController {
         if (session != null) {
             session.invalidate();
         }
+
         return "redirect:/";
+    }
+
+    private String getEmailFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("email")) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     private boolean isInValidFields(BindingResult bindingResult) {
@@ -107,18 +120,21 @@ public class MemberController {
                 && session.getAttribute("email").equals(memberFormDto.getEmail());
     }
 
-    private boolean isValidMember(MemberFormDto memberFormDto, HttpServletRequest request, HttpServletResponse response) {
+    private boolean isValidMember(MemberFormDto memberFormDto, HttpServletRequest request, HttpServletResponse response, String rememberMe) {
         if (memberService.isValidUser(memberFormDto)) {
             HttpSession session = request.getSession();
             session.setAttribute("email", memberFormDto.getEmail());
 
-            Cookie cookie = new Cookie("email", memberFormDto.getEmail());
-            if (memberFormDto.isRememberMe()) {
+            if ("on".equals(rememberMe)) {
+                Cookie cookie = new Cookie("email", memberFormDto.getEmail());
                 cookie.setMaxAge(24 * 60 * 60);
+                response.addCookie(cookie);
             } else {
+                Cookie cookie = new Cookie("email", "");
                 cookie.setMaxAge(0);
+                response.addCookie(cookie);
             }
-            response.addCookie(cookie);
+
             return true;
         }
 
