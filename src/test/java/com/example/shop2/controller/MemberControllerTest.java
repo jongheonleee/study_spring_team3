@@ -17,7 +17,7 @@ import com.example.shop2.dto.MemberFormDto;
 import com.example.shop2.entity.Member;
 import com.example.shop2.exception.global.EmptyRequiredValuesException;
 import com.example.shop2.exception.member.DuplicatedEmailException;
-import com.example.shop2.service.MemberServiceBase;
+import com.example.shop2.service.base.MemberServiceBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -5,7 +5,7 @@ import com.example.shop2.dto.MemberFormDto;
 import com.example.shop2.exception.global.EmptyRequiredValuesException;
 import com.example.shop2.exception.global.RetryFailedException;
 import com.example.shop2.exception.member.DuplicatedEmailException;
-import com.example.shop2.service.MemberServiceBase;
+import com.example.shop2.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class MemberController {
 
     @Autowired
-    private MemberServiceBase memberServiceBase;
+    private MemberService memberService;
 
     @GetMapping("/new")
     public String newMember(String errorMsg, Model model, MemberFormDto memberFormDto) {
@@ -40,13 +40,12 @@ public class MemberController {
     @PostMapping("/new")
     public String createNewMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, RedirectAttributes rtts, Model model) {
         if (isInValidFields(bindingResult)) {
-            String errorMsg = makeErrorMessage(bindingResult);
-            rtts.addAttribute("errorMsg", errorMsg);
+            rtts.addAttribute("errorMsg",  makeErrorMessage(bindingResult));
             return "redirect:/members/new";
         }
 
         try {
-            memberServiceBase.create(memberFormDto);
+            memberService.create(memberFormDto);
         } catch (DuplicatedEmailException | EmptyRequiredValuesException e) {
             rtts.addAttribute("errorMsg", e.getMessage());
             log.debug(e.getMessage());
@@ -109,7 +108,7 @@ public class MemberController {
     }
 
     private boolean isValidMember(MemberFormDto memberFormDto, HttpServletRequest request, HttpServletResponse response) {
-        if (memberServiceBase.isValidUser(memberFormDto)) {
+        if (memberService.isValidUser(memberFormDto)) {
             HttpSession session = request.getSession();
             session.setAttribute("email", memberFormDto.getEmail());
 

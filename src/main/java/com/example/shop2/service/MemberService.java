@@ -9,8 +9,7 @@ import com.example.shop2.exception.member.DuplicatedEmailException;
 public interface MemberService {
 
     // 회원 등록
-    Member create(
-            MemberFormDto memberFormDto)
+    Member create(MemberFormDto memberFormDto)
             throws DuplicatedEmailException, EmptyRequiredValuesException, RetryFailedException;
 
     boolean isValidUser(MemberFormDto memberFormDto);

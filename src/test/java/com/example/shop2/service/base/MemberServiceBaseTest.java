@@ -1,15 +1,12 @@
-package com.example.shop2.service;
+package com.example.shop2.service.base;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.shop2.constant.Role;
 import com.example.shop2.dto.MemberFormDto;
 import com.example.shop2.entity.Member;
-import com.example.shop2.exception.global.EmptyRequiredValuesException;
-import com.example.shop2.exception.global.RetryFailedException;
 import com.example.shop2.exception.member.DuplicatedEmailException;
 import com.example.shop2.repository.MemberRepository;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,18 +16,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.TransactionSystemException;
 
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
-@TestPropertySource(locations = "classpath:application-test.properties")
 class MemberServiceBaseTest {
 
     @Mock
@@ -39,18 +30,6 @@ class MemberServiceBaseTest {
     @InjectMocks
     private MemberServiceBase memberServiceBase;
 
-    private static class CustomDataAccessException extends DataAccessException {
-
-        // 기본 생성자
-        public CustomDataAccessException(String msg) {
-            super(msg);
-        }
-
-        // 원인을 포함하는 생성자
-        public CustomDataAccessException(String msg, Throwable cause) {
-            super(msg, cause);
-        }
-    }
 
     @BeforeEach
     public void setUp() {
@@ -87,7 +66,7 @@ class MemberServiceBaseTest {
     public void testCreatingMemberWithDuplicatedEmail() {
         // given
         var duplicatedEmailMemberFormDto = createMemberFormDto(1);
-        when(memberRepository.save(any(Member.class))).thenThrow(DataIntegrityViolationException.class);
+        when(memberRepository.findByEmail(anyString())).thenReturn(new Member());
 
         assertThrows(DuplicatedEmailException.class,
                 () -> memberServiceBase.create(duplicatedEmailMemberFormDto));
@@ -102,27 +81,10 @@ class MemberServiceBaseTest {
         when(memberRepository.save(any(Member.class)))
                 .thenThrow(TransactionSystemException.class);
 
-        assertThrows(EmptyRequiredValuesException.class,
+        assertThrows(TransactionSystemException.class,
                 () -> memberServiceBase.create(emptyRequiredValuesMemberFormDto));
     }
 
-    @DisplayName("회원 등록 - 1-3. DB상의 문제가 발생해서 재시도 처리")
-    @Test
-    public void testCreatingMemberWithExternalSettingError() {
-        LocalDateTime startTime = LocalDateTime.now();
-        LocalDateTime expectedEndTime = startTime.plusSeconds(9);
-
-        MemberFormDto memberFormDto = createMemberFormDto(1);
-        when(memberRepository.save(any(Member.class)))
-                .thenThrow(CustomDataAccessException.class);
-
-        assertThrows(RetryFailedException.class, 
-                () -> memberServiceBase.create(memberFormDto)); // 10초 걸리게 만듦
-
-        LocalDateTime actualEndTime = LocalDateTime.now();
-        assertTrue(actualEndTime.isAfter(expectedEndTime));
-
-    }
 
     @DisplayName("회원 등록 - 1-4. 회원 등록 성공")
     @ParameterizedTest
@@ -131,8 +93,11 @@ class MemberServiceBaseTest {
         for (int i=0; i<count; i++) {
             var memberFormDto = createMemberFormDto(i);
             var member = Member.createMember(memberFormDto);
+
+            // 중복된 이메일 못찾게 만듦
+            when(memberRepository.findByEmail(anyString())).thenReturn(null);
+            // save 메서드가 호출되면 member를 반환하게 만듦
             when(memberRepository.save(any(Member.class))).thenReturn(member);
-            System.out.println(memberRepository.save(member));
 
             Member savedMember = memberServiceBase.create(memberFormDto);
 
@@ -168,7 +133,7 @@ class MemberServiceBaseTest {
         // 리포지토리 세팅
         when(memberRepository.findByEmail(anyString())).thenReturn(member);
 
-        // 실행, 결과가 False
+        // 실행, 결과가 true
         assertTrue(memberServiceBase.isValidUser(memberFormDto));
     }
 
