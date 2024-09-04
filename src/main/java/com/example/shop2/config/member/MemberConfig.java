@@ -1,10 +1,10 @@
 package com.example.shop2.config.member;
 
 
-import com.example.shop2.repository.MemberRepository;
-import com.example.shop2.service.MemberService;
-import com.example.shop2.service.base.MemberServiceBase;
-import com.example.shop2.service.expand.MemberServiceWithRetry;
+import com.example.shop2.repository.member.MemberRepository;
+import com.example.shop2.service.member.MemberService;
+import com.example.shop2.service.member.base.MemberServiceBase;
+import com.example.shop2.service.member.expand.MemberServiceWithRetry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

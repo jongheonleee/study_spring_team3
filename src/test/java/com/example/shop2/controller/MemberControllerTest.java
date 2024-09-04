@@ -1,7 +1,7 @@
 package com.example.shop2.controller;
 
-import static com.example.shop2.error.MemberErrorCode.*;
-import static com.example.shop2.error.MemberErrorCode.EmptyRequiredValue;
+import static com.example.shop2.error.member.MemberErrorCode.*;
+import static com.example.shop2.error.member.MemberErrorCode.EmptyRequiredValue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -12,12 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.example.shop2.constant.Role;
-import com.example.shop2.dto.MemberFormDto;
-import com.example.shop2.entity.Member;
+import com.example.shop2.constant.member.Role;
+import com.example.shop2.controller.member.MemberController;
+import com.example.shop2.dto.member.MemberFormDto;
+import com.example.shop2.entity.member.Member;
 import com.example.shop2.exception.global.EmptyRequiredValuesException;
 import com.example.shop2.exception.member.DuplicatedEmailException;
-import com.example.shop2.service.base.MemberServiceBase;
+import com.example.shop2.service.member.base.MemberServiceBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

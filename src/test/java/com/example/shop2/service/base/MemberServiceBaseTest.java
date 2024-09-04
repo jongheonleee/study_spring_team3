@@ -2,11 +2,12 @@ package com.example.shop2.service.base;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.shop2.constant.Role;
-import com.example.shop2.dto.MemberFormDto;
-import com.example.shop2.entity.Member;
+import com.example.shop2.constant.member.Role;
+import com.example.shop2.dto.member.MemberFormDto;
+import com.example.shop2.entity.member.Member;
 import com.example.shop2.exception.member.DuplicatedEmailException;
-import com.example.shop2.repository.MemberRepository;
+import com.example.shop2.repository.member.MemberRepository;
+import com.example.shop2.service.member.base.MemberServiceBase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

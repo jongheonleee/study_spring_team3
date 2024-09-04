@@ -4,10 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.example.shop2.constant.Role;
-import com.example.shop2.dto.MemberFormDto;
+import com.example.shop2.constant.member.Role;
+import com.example.shop2.dto.member.MemberFormDto;
 import com.example.shop2.exception.global.RetryFailedException;
-import com.example.shop2.service.base.MemberServiceBase;
+import com.example.shop2.service.member.base.MemberServiceBase;
+import com.example.shop2.service.member.expand.MemberServiceWithRetry;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
