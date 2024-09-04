@@ -19,25 +19,31 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+    public final com.example.shop2.entity.QBaseEntity _super = new com.example.shop2.entity.QBaseEntity(this);
+
     public final StringPath address = createString("address");
 
-    public final StringPath createdAt = createString("createdAt");
+    //inherited
+    public final StringPath createBy = _super.createBy;
 
     public final StringPath email = createString("email");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath modifiedAt = createString("modifiedAt");
+    //inherited
+    public final StringPath modifiedBy = _super.modifiedBy;
 
     public final StringPath name = createString("name");
 
     public final StringPath password = createString("password");
 
-    public final DateTimePath<java.time.LocalDateTime> regTime = createDateTime("regTime", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> regTime = _super.regTime;
 
     public final EnumPath<com.example.shop2.constant.member.Role> role = createEnum("role", com.example.shop2.constant.member.Role.class);
 
-    public final DateTimePath<java.time.LocalDateTime> updateTime = createDateTime("updateTime", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
     public QMember(String variable) {
         super(Member.class, forVariable(variable));

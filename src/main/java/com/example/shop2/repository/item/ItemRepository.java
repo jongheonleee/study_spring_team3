@@ -11,25 +11,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 
-public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item> {
+public interface ItemRepository
+        extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item>, ItemRepositoryCustom {
     // 상품 이름으로 조회
     List<Item> findByItemNm(String itemNm);
     // 상품 가격으로 조회
     List<Item> findByPriceLessThan(Long price);
     // 상품 이름 또는 상품 상세 내용으로 조회
     List<Item> findByItemNmOrItemDetail(String itemNm, String itemDetail);
-//    // 관리자 조회용
-//    Page<Item> getMainItems(ItemSearchDto itemSearchDto, Pageable pageable);
-//    // 고객 조회용
-//    Page<Item> getAdminItems(ItemSearchDto itemSearchDto, Pageable pageable);
-    // 상품 상태 조회
-//    List<Item> findByItemSellState(String itemSellState);
-    // 등록일자(기간) 조회
-//    List<Item> findByRegTimeAfter(LocalDateTime regTime);
+    // 상품 가격으로 조회하고 가격으로 정렬함
+    List<Item> findByPriceLessThanOrderByPriceDesc(Integer price);
     // 상품 상세 내용으로 조회
-    @Query("SELECT i FROM Item i WHERE i.itemDetail LIKE %:itemDetail%")
-    List<Item> findByItemDetailContaining(@Param("itemDetail") String itemDetail);
-    // 상품 아이디로 삭제
-    void deleteById(Long id);
+    @Query("SELECT i FROM Item i WHERE i.itemDetail LIKE %:itemDetail% ORDER BY i.price DESC ")
+    List<Item> findByItemDetail(@Param("itemDetail") String itemDetail);
 
 }

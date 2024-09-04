@@ -11,14 +11,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 public class Shop2Application {
 
 	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(Shop2Application.class, args);
-
-		// ApplicationContext에 등록된 빈 이름 조회
-		String[] beanNames = context.getBeanDefinitionNames();
-		System.out.println("Registered beans: ");
-		for (String beanName : beanNames) {
-			System.out.println(beanName);
-		}
+		SpringApplication.run(Shop2Application.class, args);
 	}
 
 }

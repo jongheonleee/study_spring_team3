@@ -2,6 +2,7 @@ package com.example.shop2.entity.member;
 
 import com.example.shop2.constant.member.Role;
 import com.example.shop2.dto.member.MemberFormDto;
+import com.example.shop2.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +27,7 @@ import lombok.ToString;
 @Builder
 @Getter @Setter
 @ToString
-public class Member {
+public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "member_id")
@@ -42,10 +43,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String createdAt;
-    private LocalDateTime regTime;
-    private String modifiedAt;
-    private LocalDateTime updateTime;
+
 
     public void updateMember(MemberFormDto memberFormDto) {
         this.setName(memberFormDto.getName());
