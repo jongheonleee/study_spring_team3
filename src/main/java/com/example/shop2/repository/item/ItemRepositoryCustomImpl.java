@@ -30,7 +30,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     // 상품 상태로 조회
     private BooleanExpression searchSellStatusEq(ItemSellState searchSellState) {
         return searchSellState == null ?
-                null : QItem.item.itemSellState.eq(searchSellState);
+                null : QItem.item.itemSellStatus.eq(searchSellState);
     }
 
     // 기간 별로 조회할 때 사용하는 조건 부분

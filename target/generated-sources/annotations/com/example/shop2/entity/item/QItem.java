@@ -22,7 +22,7 @@ public class QItem extends EntityPathBase<Item> {
     public final com.example.shop2.entity.QBaseEntity _super = new com.example.shop2.entity.QBaseEntity(this);
 
     //inherited
-    public final StringPath createBy = _super.createBy;
+    public final StringPath createdBy = _super.createdBy;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -30,7 +30,7 @@ public class QItem extends EntityPathBase<Item> {
 
     public final StringPath itemNm = createString("itemNm");
 
-    public final EnumPath<com.example.shop2.constant.item.ItemSellState> itemSellState = createEnum("itemSellState", com.example.shop2.constant.item.ItemSellState.class);
+    public final EnumPath<com.example.shop2.constant.item.ItemSellState> itemSellStatus = createEnum("itemSellStatus", com.example.shop2.constant.item.ItemSellState.class);
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;

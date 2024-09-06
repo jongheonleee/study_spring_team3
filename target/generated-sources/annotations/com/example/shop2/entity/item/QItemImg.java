@@ -25,7 +25,7 @@ public class QItemImg extends EntityPathBase<ItemImg> {
     public final com.example.shop2.entity.QBaseEntity _super = new com.example.shop2.entity.QBaseEntity(this);
 
     //inherited
-    public final StringPath createBy = _super.createBy;
+    public final StringPath createdBy = _super.createdBy;
 
     public final StringPath imgName = createString("imgName");
 

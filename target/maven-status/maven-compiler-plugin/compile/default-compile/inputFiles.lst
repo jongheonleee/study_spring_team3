@@ -1,4 +1,3 @@
-/Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/repository/item/ItemImgReposiotry.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/repository/item/ItemRepositoryCustomImpl.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/service/member/base/MemberServiceBase.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/error/member/MemberErrorCode.java
@@ -14,6 +13,7 @@
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/entity/item/ItemImg.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/constant/item/ItemSellState.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/exception/global/EmptyRequiredValuesException.java
+/Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/repository/item/ItemImgRepository.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/controller/MainController.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/config/WebMvcConfig.java
 /Users/qwefghnm1212/Desktop/shop2/src/main/java/com/example/shop2/exception/global/RetryFailedException.java

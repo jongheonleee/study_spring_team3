@@ -24,7 +24,7 @@ public class QMember extends EntityPathBase<Member> {
     public final StringPath address = createString("address");
 
     //inherited
-    public final StringPath createBy = _super.createBy;
+    public final StringPath createdBy = _super.createdBy;
 
     public final StringPath email = createString("email");
 

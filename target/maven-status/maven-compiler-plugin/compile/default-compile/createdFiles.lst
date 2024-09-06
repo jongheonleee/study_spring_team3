@@ -7,7 +7,6 @@ com/example/shop2/dto/item/MainItemDto.class
 com/example/shop2/config/WebMvcConfig.class
 com/example/shop2/dto/item/ItemFormDto.class
 com/example/shop2/controller/MainController.class
-com/example/shop2/repository/item/ItemImgReposiotry.class
 com/example/shop2/service/member/base/MemberServiceBase.class
 com/example/shop2/entity/item/ItemImg.class
 com/example/shop2/service/item/FileService.class
@@ -32,6 +31,7 @@ com/example/shop2/exception/member/MemberNotFoundException.class
 com/example/shop2/Shop2Application.class
 com/example/shop2/service/item/ItemImgService.class
 com/example/shop2/error/member/MemberErrorCode.class
+com/example/shop2/repository/item/ItemImgRepository.class
 com/example/shop2/error/GlobalErrorCode.class
 com/example/shop2/entity/item/QItemImg.class
 com/example/shop2/dto/item/QMainItemDto.class

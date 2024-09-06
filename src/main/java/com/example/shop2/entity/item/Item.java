@@ -3,6 +3,7 @@ package com.example.shop2.entity.item;
 
 import com.example.shop2.constant.item.ItemSellState;
 import com.example.shop2.dto.item.ItemDto;
+import com.example.shop2.dto.item.ItemFormDto;
 import com.example.shop2.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +36,7 @@ public class Item extends BaseEntity {
     private String itemNm;
 
     @Column(name = "price", nullable = false)
-    private int price;
+    private Integer price;
 
     @Column(nullable = false)
     private int stockNumber;
@@ -45,9 +46,13 @@ public class Item extends BaseEntity {
     private String itemDetail;
 
     @Enumerated(EnumType.STRING)
-    private ItemSellState itemSellState;
+    private ItemSellState itemSellStatus;
 
-    public void updateItem(ItemDto itemDto) {
-
+    public void updateItem(ItemFormDto itemFormDto) {
+        this.itemNm = itemFormDto.getItemNm();
+        this.price = itemFormDto.getPrice();
+        this.stockNumber = itemFormDto.getStockNumber();
+        this.itemDetail = itemFormDto.getItemDetail();
+        this.itemSellStatus = itemFormDto.getItemSellStatus();
     }
 }

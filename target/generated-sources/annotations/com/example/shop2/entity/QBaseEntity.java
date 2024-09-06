@@ -21,7 +21,7 @@ public class QBaseEntity extends EntityPathBase<BaseEntity> {
 
     public final QBaseTimeEntity _super = new QBaseTimeEntity(this);
 
-    public final StringPath createBy = createString("createBy");
+    public final StringPath createdBy = createString("createdBy");
 
     public final StringPath modifiedBy = createString("modifiedBy");
 
